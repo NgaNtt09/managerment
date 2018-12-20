@@ -10,6 +10,11 @@ class App extends Component {
       tasks: [],
       isDisplayForm: false,
       editting: null,
+      filter: {
+        name: '',
+        status: -1
+      },
+      keyWord:''
     }
   }
   //được gọi khi refresh trang
@@ -133,34 +138,31 @@ class App extends Component {
   onFilterTask = (filterName, filterStatus) => {
     filterStatus = parseInt(filterStatus, 10);
     console.log(filterName + '--' + typeof (filterStatus));
-    this.check();
-
-  }
-
-  check = (filterStatus) => {
-    var tasks = this.state.tasks;
-    var resultActive = [];
-    var resultAn = [];
-    tasks.forEach((task, index) => {
-      if (task.status) {
-        resultActive.push(task);
-        console.log(resultActive);
-      } else {
-        resultAn.push(task)
+    this.setState({
+      filter: {
+        name: filterName.toLowerCase(),
+        status: filterStatus
       }
-    });
-    if (filterStatus === 0) {
-      return resultAn;
-    } else if (filterStatus === 1) {
-      return resultActive;
-    } else
-
-      return tasks;
-
+    })
   }
 
   render() {
-    var { tasks, isDisplayForm } = this.state;//# var tasks = this.state.tasks
+    var { tasks, isDisplayForm, filter } = this.state;//# var tasks = this.state.tasks
+    console.log(filter);
+    if (filter) {
+      if (filter.name) {
+        tasks = tasks.filter((task) => {
+          return task.name.toLowerCase().indexOf(filter.name) !== -1
+        });
+      }
+      tasks = tasks.filter((task) => {
+        if (filter.status === -1) {
+          return tasks;
+        } else {
+          return task.status === (filter.status === 1 ? true : false);
+        }
+      })
+    }
     var elmTaskForm = isDisplayForm ? <TaskForm
       onExitForm={this.onExitForm}
       onSubmit={this.onSubmit}

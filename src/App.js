@@ -3,7 +3,7 @@ import './App.css';
 import TaskForm from './components/TaskForm'
 import TaskControl from './components/TaskControl'
 import TaskList from './components/TaskList'
-
+import Redux from './redux/Redux'
 class App extends Component {
   constructor(props) {
     super(props);
